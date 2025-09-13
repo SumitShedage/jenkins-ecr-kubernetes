@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/Ritzz16/nginx-jenkins-ecr-minikube.git'
+               git branch: 'main', url: 'https://github.com/SumitShedage/jenkins-ecr-kubernetes.git'
             }
         }
         stage('Build Docker Image') {
@@ -26,7 +26,7 @@ pipeline {
                 sh "docker push public.ecr.aws/w4c1w9k0/nginx-app:latest"
             }
         }
-        stage('Deploy to Minikube') {
+        stage('Deploy to k8s') {
             steps {
                 sh """
                 kubectl apply -f deployment.yaml
@@ -36,4 +36,5 @@ pipeline {
         }
     }
 }
+
 
