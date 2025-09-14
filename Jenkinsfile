@@ -1,8 +1,7 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCOUNT_ID = "767398125076"
-        AWS_REGION = "ap-south-1"   
+        ECR_PUBLIC_REGISTRY = "public.ecr.aws/w4c1w9k0"
         ECR_REPO = "nginx-app"
         IMAGE_TAG = "latest"
     }
@@ -28,13 +27,13 @@ pipeline {
         }
         stage('Deploy to k8s') {
             steps {
-                sh """
-                kubectl apply -f deployment.yaml
-                kubectl get pods 
-                """
+                withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh """
+                    kubectl apply -f deployment.yaml
+                    kubectl get pods
+                    """
+                }
             }
         }
     }
 }
-
-
